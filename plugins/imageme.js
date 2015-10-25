@@ -3,7 +3,9 @@ var images = require("google-images");
 
 function ImageMe(slack) {
   this.match = function (msg) {
-    return _.startsWith(msg.text.toLowerCase(), "image me");
+    if (msg.text) {
+      return _.startsWith(msg.text.toLowerCase(), "image me");
+    }
   };
 
   this.processMessage = function (msg) {
