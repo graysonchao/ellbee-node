@@ -4,7 +4,7 @@ var Slack = require('slack-client');
 var autoreconnect = true;
 var automark = true;
 var apiKey = process.argv[2];
-var slack = new Slack(apiKey, autoreconnect, automark);
+var slack = new Slack(config.slack.apiKey, autoreconnect, automark);
 
 var plugins = [];
 
