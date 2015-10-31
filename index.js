@@ -33,8 +33,7 @@ slack.on('message', function handleMessage (msg) {
     return plugin.processMessage(msg);
   })
   .catch(function (err) {
-    console.log(err);
-    throw err;
+    console.log(err.stack);
   });
 });
 
