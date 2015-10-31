@@ -26,3 +26,6 @@ build/Release
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
+
+# configs for ez deployment, totally not hacky at all
+config.json

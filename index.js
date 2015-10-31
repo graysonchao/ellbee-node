@@ -1,3 +1,4 @@
+var Promise = require("bluebird");
 var config = require('./config.json');
 
 var Slack = require('slack-client');
@@ -25,11 +26,16 @@ slack.on('open', function () {
 });
 
 slack.on('message', function handleMessage (msg) {
-  for (var i = 0; i < plugins.length; i++) {
-    if (plugins[i].match(msg)) {
-      plugins[i].processMessage(msg);
-    }
-  }
+  Promise.filter(plugins, function (plugin) {
+    return plugin.match(msg)
+  })
+  .each(function (plugin) {
+    return plugin.processMessage(msg);
+  })
+  .catch(function (err) {
+    console.log(err);
+    throw err;
+  });
 });
 
 slack.login();

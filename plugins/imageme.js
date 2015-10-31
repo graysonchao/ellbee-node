@@ -1,19 +1,37 @@
-var _ = require("lodash");
-var images = require("google-images");
+var _       = require("lodash");
+var Promise = require("bluebird");
+var images  = require("google-images");
+var request = require("then-request");
 
 function ImageMe(slack) {
   this.match = function (msg) {
-    if (msg.text) {
-      return _.startsWith(msg.text.toLowerCase(), "image me");
-    }
+    return msg.text && _.startsWith(msg.text.toLowerCase(), "image me");
   };
 
   this.processMessage = function (msg) {
+    var channel = slack.getChannelGroupOrDMByID(msg.channel);
     var query = _.trimLeft(msg.text, "image me");
-    images.search(query, function (err, images) {
-      var channel = slack.getChannelGroupOrDMByID(msg.channel);
-      var response = _.sample(images).url;
-      channel.send(response);
+
+    return new Promise(function (resolve, reject) {
+      images.search(query, function (err, res) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    })
+    .map(function (result) {
+      return result.url;
+    })
+    .map(function (url) {
+      return request('HEAD', url);
+    })
+    .filter(function (response) {
+      return _.contains(response.headers["content-type"], "image");
+    })
+    .then(function (responses) {
+      channel.send(_.sample(responses).url);
     });
 
   };

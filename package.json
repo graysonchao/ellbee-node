@@ -9,8 +9,11 @@
   "author": "Grayson Chao",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.0.2",
     "google-images": "^0.1.2",
     "lodash": "^3.10.1",
-    "slack-client": "^1.4.1"
+    "request": "^2.65.0",
+    "slack-client": "^1.4.1",
+    "then-request": "^2.1.1"
   }
 }
